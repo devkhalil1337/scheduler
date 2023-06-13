@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
   public allowMultipleCategory: Boolean = true;
   public selectedDate: Date = new Date();
-  public views: Array<string> = ["Day", "Week", "Month"];
+  public views: Array<string> = ["Day", "Week", "Month","TimelineDay"];
   public eventSettings: EventSettingsModel = {
     dataSource: [],
     resourceColorField: 'Rooms'

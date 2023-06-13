@@ -79,14 +79,20 @@
 
         <ejs-schedule width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
           [eventSettings]="eventSettings" [timeScale]="timeScale" [group]='group'>
-          
+          <e-views>
+            <e-view option="TimelineDay" orientation="Horizontal" displayName="Day"></e-view>
+            <!-- <e-view option="Day" orientation="Vertical" showWeekend="false" showWeekNumber="false"></e-view> -->
+            <e-view option="Week" orientation="Vertical"></e-view>
+            <e-view option="Month" orientation="Vertical"></e-view>
+          </e-views>
+
           <e-resources>
-            <e-resource field="RoomId" title="Room" name="Rooms" [dataSource]="roomDataSource"
-              textField="RoomText" idField="Id" colorField="RoomColor">
-            </e-resource>
-            <e-resource field="OwnerId" title="Owner" name="Owners"
-              [dataSource]="ownerDataSource" [allowMultiple]="allowMultipleCategory"
-              textField="OwnerText" idField="Id" groupIDField="OwnerGroupId" colorField="OwnerColor">
+            <!-- <e-resource field="RoomId" title="Room" name="Rooms" [dataSource]="roomDataSource" textField="RoomText"
+              idField="Id" colorField="RoomColor">
+            </e-resource> -->
+            <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="ownerDataSource"
+              [allowMultiple]="allowMultipleCategory" textField="OwnerText" idField="Id" groupIDField="OwnerGroupId"
+              colorField="OwnerColor">
             </e-resource>
           </e-resources>
 
