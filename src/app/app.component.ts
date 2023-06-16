@@ -1,8 +1,15 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { extend } from '@syncfusion/ej2-base';
-import { DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, EventSettingsModel, View, GroupModel, TimeScaleModel } from '@syncfusion/ej2-angular-schedule';
+import { DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, EventSettingsModel, View, GroupModel, TimeScaleModel, ScheduleComponent } from '@syncfusion/ej2-angular-schedule';
 import { roomData } from '../data';
 declare var $: any;
+
+interface Owner {
+  OwnerText: string;
+  Id: number;
+  OwnerGroupId: number;
+  OwnerColor: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -12,12 +19,16 @@ declare var $: any;
   providers: [DayService, WeekService, WorkWeekService, MonthService,
     AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService]
 })
-export class AppComponent implements OnInit {
-  
+export class AppComponent implements OnInit,AfterViewInit   {
+  @ViewChild('scheduleObj', { static: false }) scheduleObj!: ScheduleComponent;
   ngOnInit(): void {
     $('div:not([class])').remove()
   }
-
+  ngAfterViewInit() {
+    if (this.scheduleObj) {
+      this.scheduleObj.refresh();
+    }
+  }
   /* public selectedDate: Date = new Date();
 
   // Different views of calendar
@@ -56,7 +67,7 @@ export class AppComponent implements OnInit {
     { OwnerText: 'Michael', Id: 3, OwnerColor: '#7499e1' }
   ]; */
 
-
+  selectedOwner: Owner | undefined;
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
   public allowMultipleCategory: Boolean = true;
   public selectedDate: Date = new Date();
@@ -76,11 +87,46 @@ export class AppComponent implements OnInit {
     { RoomText: "Part time", Id: 5, RoomColor: "#ffaa00" }
   ];
   public allowMultipleOwner: Boolean = true;
-  public ownerDataSource: Object[] = [
+  public ownerDataSource: Owner[] = [
     { OwnerText: "Arpit", Id: 1, OwnerGroupId: 4, OwnerColor: "#ffaa00" },
     { OwnerText: "Steven", Id: 2, OwnerGroupId: 3, OwnerColor: "#f8a398" },
     { OwnerText: "Michael", Id: 3, OwnerGroupId: 4, OwnerColor: "#7499e1" }
   ];
+
+  onScheduleCreated(args: { schedule: ScheduleComponent }): void {
+    console.log({args})
+    this.scheduleObj = args.schedule;
+  }
+
+
+  onUserSelect($event: any) {
+    const selectedUserId = $event.target.value;
+    const selectedOwner = this.ownerDataSource.find(owner => owner.Id === +selectedUserId);
+    if (selectedOwner) {
+      // Update the selected owner in the Schedule component
+      this.selectedOwner = selectedOwner;
+  
+      // Create a new resource collection with only the selected owner
+      const selectedOwnerResources = [{
+        OwnerId: selectedOwner.Id,
+        OwnerText: selectedOwner.OwnerText,
+        OwnerGroupId: selectedOwner.OwnerGroupId,
+        OwnerColor: selectedOwner.OwnerColor
+      }];
+  
+      // Update the resourceSettings in the Schedule component
+      this.eventSettings = {
+        dataSource: selectedOwnerResources,
+        resourceColorField: 'Owners'
+      };
+  
+      // Refresh the Schedule component
+      if (this.scheduleObj) {
+        this.scheduleObj.refresh();
+      }
+    }
+  }
+  
 }
 
 

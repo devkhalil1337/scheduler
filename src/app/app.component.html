@@ -18,11 +18,9 @@
         </div>
         <div class="mb-4">
           <label for="formGroupExampleInput" class="form-label text-uppercase">User</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" (change)="onUserSelect($event)">
             <option selected>All</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option *ngFor="let owner of ownerDataSource" [value]="owner.Id">{{ owner.OwnerText }}</option>
           </select>
         </div>
       </div>
@@ -77,26 +75,22 @@
     <div class="control-section">
       <div class="col-lg-12 content-wrapper">
 
-        <ejs-schedule width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
-          [eventSettings]="eventSettings" [timeScale]="timeScale" [group]='group'>
+        <ejs-schedule #scheduleObj width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
+          [eventSettings]="eventSettings" [timeScale]="timeScale" [group]="group">
           <e-views>
             <e-view option="TimelineDay" orientation="Horizontal" displayName="Day"></e-view>
-            <!-- <e-view option="Day" orientation="Vertical" showWeekend="false" showWeekNumber="false"></e-view> -->
-            <e-view option="Week" orientation="Vertical"></e-view>
-            <e-view option="Month" orientation="Vertical"></e-view>
+            <e-view option="TimelineWeek" orientation="Horizontal" displayName="Week"></e-view>
+            <e-view option="TimelineMonth" orientation="Horizontal" displayName="Month"></e-view>
           </e-views>
 
           <e-resources>
-            <!-- <e-resource field="RoomId" title="Room" name="Rooms" [dataSource]="roomDataSource" textField="RoomText"
-              idField="Id" colorField="RoomColor">
-            </e-resource> -->
             <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="ownerDataSource"
               [allowMultiple]="allowMultipleCategory" textField="OwnerText" idField="Id" groupIDField="OwnerGroupId"
               colorField="OwnerColor">
             </e-resource>
           </e-resources>
-
         </ejs-schedule>
+
 
       </div>
     </div>

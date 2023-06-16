@@ -11,3 +11,22 @@
   display: flex;
   justify-content: center;
 }
+
+.custom-time {
+  font-weight: bold;
+}
+
+.custom-owner {
+  display: flex;
+  align-items: center;
+}
+
+.owner-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.no-time-slots .e-timeline-day-scale {
+  display: none;
+}
