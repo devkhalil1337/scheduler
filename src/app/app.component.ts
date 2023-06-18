@@ -21,6 +21,9 @@ interface Owner {
 })
 export class AppComponent implements OnInit,AfterViewInit   {
   @ViewChild('scheduleObj', { static: false }) scheduleObj!: ScheduleComponent;
+
+  user:string  = "";
+  selectedUser: Owner | undefined
   ngOnInit(): void {
     $('div:not([class])').remove()
   }
@@ -94,7 +97,6 @@ export class AppComponent implements OnInit,AfterViewInit   {
   ];
 
   onScheduleCreated(args: { schedule: ScheduleComponent }): void {
-    console.log({args})
     this.scheduleObj = args.schedule;
   }
 
@@ -103,27 +105,66 @@ export class AppComponent implements OnInit,AfterViewInit   {
     const selectedUserId = $event.target.value;
     const selectedOwner = this.ownerDataSource.find(owner => owner.Id === +selectedUserId);
     if (selectedOwner) {
-      // Update the selected owner in the Schedule component
       this.selectedOwner = selectedOwner;
-  
-      // Create a new resource collection with only the selected owner
       const selectedOwnerResources = [{
         OwnerId: selectedOwner.Id,
         OwnerText: selectedOwner.OwnerText,
         OwnerGroupId: selectedOwner.OwnerGroupId,
         OwnerColor: selectedOwner.OwnerColor
       }];
-  
-      // Update the resourceSettings in the Schedule component
       this.eventSettings = {
         dataSource: selectedOwnerResources,
         resourceColorField: 'Owners'
       };
-  
-      // Refresh the Schedule component
       if (this.scheduleObj) {
         this.scheduleObj.refresh();
       }
+    }
+  }
+
+  openModal($event ? : any): void {
+    const selectedOption = $event.target.value;
+    if(selectedOption == 'new') {
+      const modal = document.getElementById('myModal');
+      
+      const openModalButton = document.getElementById('openModalButton');
+      if(modal) modal.style.display = 'block';
+      const closeButton = document.getElementsByClassName('close')[0];
+      closeButton.addEventListener('click', function() {
+        if(modal) {
+          modal.style.display = 'none';
+        }
+      });
+      this.onCloseInnerPopup();
+    }
+  }
+  addUser(): void {
+    const modal = document.getElementById('exampleModal');
+    if(modal) {
+      modal.style.display = 'block';
+      modal.style.opacity = "1";
+      this.user = ""
+    }
+  }
+  onUserSave() {
+    const newOwner = {
+      Id: this.ownerDataSource.length,
+      OwnerText: this.user,
+      OwnerColor: '',
+      OwnerGroupId: 4
+    }
+    this.ownerDataSource.push(newOwner)
+    this.selectedUser = newOwner
+    this.scheduleObj.refresh();
+    this.onCloseInnerPopup();
+
+  }
+
+  onCloseInnerPopup(){
+    const exampleModal = document.getElementById('exampleModal');
+    const innerCloseButton = document.getElementsByClassName('closeInner')[0];
+    if(exampleModal) {
+      exampleModal.style.display = 'none';
     }
   }
   

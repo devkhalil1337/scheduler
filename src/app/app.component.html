@@ -18,9 +18,11 @@
         </div>
         <div class="mb-4">
           <label for="formGroupExampleInput" class="form-label text-uppercase">User</label>
-          <select class="form-select" aria-label="Default select example" (change)="onUserSelect($event)">
-            <option selected>All</option>
+          <select class="form-select" aria-label="Default select example" name="owner" [(ngModel)]="selectedOwner"
+            (change)="openModal($event)">
+            <option selected value="all">All</option>
             <option *ngFor="let owner of ownerDataSource" [value]="owner.Id">{{ owner.OwnerText }}</option>
+            <option value="new">+ Add Owner</option>
           </select>
         </div>
       </div>
@@ -117,5 +119,206 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Users List</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="container">
+      <div class="table-responsive">
+        <div class="table-wrapper">
+          <div class="table-title">
+            <div class="row">
+              <div class="col-sm-8">
+                <h2>User <b>Details</b></h2>
+              </div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-info add-new" data-toggle="modal" data-target="#exampleModal"
+                  data-whatever="@mdo" (click)="addUser()"> Add </button>
+              </div>
+            </div>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+              <tr *ngFor="let owner of ownerDataSource">
+                <td>{{owner.Id}}</td>
+                <td>{{owner.OwnerText}}</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- model -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+          <button type="button" class="closeInner" data-dismiss="modal" aria-label="Close"
+            (click)="onCloseInnerPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" name="name" id="modalName" [(ngModel)]="user">
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary closeInner" data-dismiss="modal"
+            (click)="onCloseInnerPopup()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onUserSave();" id="saveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    var actions = `<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                      <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                      <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>`
+    // Append table with add row form on add new button click
+
+    console.log(($("#modalName").value));
+
+
+    $('#modalName').on('keyup', function () {
+      let empty = false;
+
+      $('#modalName').each(function () {
+        empty = $(this).val().length == 0;
+      });
+
+      if (empty)
+        $('#saveBtn').attr('disabled', 'disabled');
+      else
+        $('#saveBtn').attr('disabled', false);
+      $('#saveBtn').removeClass("disabled")
+
+    });
+
+
+    $(document).on("click", "#saveBtn", function () {
+      var index = $("table tbody tr:last-child").index();
+
+      var row = '<tr>' +
+        '<td><input type="text" class="form-control" name="name" id="name"></td>' +
+
+        '<td>' + actions + '</td>' +
+        '</tr>';
+      $("table").append(row);
+      console.log(document.getElementById("modalName").value);
+      $("table tbody tr:last-child td:first-child").html(document.getElementById("modalName").value)
+
+
+
+      // $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+      // $('[data-toggle="tooltip"]').tooltip();
+      $('#exampleModal').modal('hide');
+      document.getElementById("modalName").value = ""
+
+      $('#saveBtn').prop('disabled', true);
+      // $('#saveBtn').addClass('disabled')
+    })
+
+
+
+    // $(".add-new").click(function(){
+    // 	$(this).attr("disabled", "disabled");
+    // 	var index = $("table tbody tr:last-child").index();
+    //     var row = '<tr>' +
+    //         '<td><input type="text" class="form-control" name="name" id="name"></td>' +
+
+    // 		'<td>' + actions + '</td>' +
+    //     '</tr>';
+    // 	$("table").append(row);		
+    // 	$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+    //     $('[data-toggle="tooltip"]').tooltip();
+    // });
+
+
+
+    // Add row on add button click
+    $(document).on("click", ".add", function () {
+      alert("test")
+      var empty = false;
+      var input = $(this).parents("tr").find('input[type="text"]');
+      input.each(function () {
+        if (!$(this).val()) {
+          $(this).addClass("error");
+          empty = true;
+        } else {
+          $(this).removeClass("error");
+        }
+      });
+      $(this).parents("tr").find(".error").first().focus();
+      if (!empty) {
+        input.each(function () {
+          $(this).parent("td").html($(this).val());
+        });
+        $(this).parents("tr").find(".add, .edit").toggle();
+        $(".add-new").removeAttr("disabled");
+      }
+    });
+
+    // Edit row on edit button click
+    $(document).on("click", ".edit", function () {
+      // $(this).parents("tr td:first-child").find("td:not(:last-child)").focus()
+      $(this).parents("tr").find("td:not(:last-child)").each(function () {
+        $(this).children("input").focus();
+        //    console.log(this);
+        $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+      });
+
+      $(this).parents("tr").find(".add, .edit").toggle();
+      $(".add-new").attr("disabled", "disabled");
+    });
+
+
+
+    // Delete row on delete button click
+    $(document).on("click", ".delete", function () {
+      $(this).parents("tr").remove();
+      $(".add-new").removeAttr("disabled");
+    });
+
+
+
+
+
+
+
+  });
+</script>
+
 
 <router-outlet></router-outlet>
