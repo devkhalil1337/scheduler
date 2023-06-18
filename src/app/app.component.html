@@ -77,19 +77,41 @@
 
         <ejs-schedule #scheduleObj width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
           [eventSettings]="eventSettings" [timeScale]="timeScale" [group]="group">
-          <e-views>
-            <e-view option="TimelineDay" orientation="Horizontal" displayName="Day"></e-view>
-            <e-view option="TimelineWeek" orientation="Horizontal" displayName="Week"></e-view>
-            <e-view option="TimelineMonth" orientation="Horizontal" displayName="Month"></e-view>
-          </e-views>
-
           <e-resources>
             <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="ownerDataSource"
               [allowMultiple]="allowMultipleCategory" textField="OwnerText" idField="Id" groupIDField="OwnerGroupId"
               colorField="OwnerColor">
             </e-resource>
           </e-resources>
+
+          <e-views>
+            <e-view option="TimelineDay" orientation="Horizontal" displayName="Day">
+              <ng-template #resourceHeaderTemplate let-data>
+                <div class="owner-container">
+                  <img src="assets/user.png" alt="Owner Image" class="owner-image" />
+                  <div class="owner-name">{{ data.resourceData.OwnerText}}</div>
+                </div>
+              </ng-template>
+            </e-view>
+            <e-view option="TimelineWeek" orientation="Horizontal" displayName="Week">
+              <ng-template #resourceHeaderTemplate let-data>
+                <div class="owner-container">
+                  <img src="assets/user.png" alt="Owner Image" class="owner-image" />
+                  <div class="owner-name">{{ data.resourceData.OwnerText }}</div>
+                </div>
+              </ng-template>
+            </e-view>
+            <e-view option="TimelineMonth" orientation="Horizontal" displayName="Month">
+              <ng-template #resourceHeaderTemplate let-data>
+                <div class="owner-container">
+                  <img src="assets/user.png" alt="Owner Image" class="owner-image" />
+                  <div class="owner-name">{{ data.resourceData.OwnerText }}</div>
+                </div>
+              </ng-template>
+            </e-view>
+          </e-views>
         </ejs-schedule>
+        >
 
 
       </div>
