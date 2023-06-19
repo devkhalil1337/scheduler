@@ -148,7 +148,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
   }
   onUserSave() {
     const newOwner = {
-      Id: this.ownerDataSource.length,
+      Id: this.ownerDataSource.length+1,
       OwnerText: this.user,
       OwnerColor: '',
       OwnerGroupId: 4
