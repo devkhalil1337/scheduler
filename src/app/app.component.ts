@@ -11,6 +11,12 @@ interface Owner {
   OwnerColor: string;
 }
 
+interface Resource {
+  RoomText: string;
+  Id: number;
+  RoomColor: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -80,22 +86,22 @@ export class AppComponent implements OnInit,AfterViewInit   {
       {
         Id: 1,
         Subject: 'Meeting',
-        StartTime: new Date(2023, 5, 16, 10, 0),
-        EndTime: new Date(2023, 5, 16, 12, 0),
+        StartTime: new Date(2023, 5, 2, 10, 0),
+        EndTime: new Date(2023, 5, 2, 12, 0),
         OwnerId: 1
       },
       {
         Id: 2,
         Subject: 'Conference',
-        StartTime: new Date(2023, 5, 17, 14, 0),
-        EndTime: new Date(2023, 5, 17, 18, 0),
+        StartTime: new Date(2023, 5, 4, 14,0),
+        EndTime: new Date(2023, 5, 5, 18, 0),
         OwnerId: 2
       },
       {
         Id: 3,
         Subject: 'Training',
-        StartTime: new Date(2023, 5, 18, 9, 0),
-        EndTime: new Date(2023, 5, 18, 11, 0),
+        StartTime: new Date(2023, 5, 8, 9, 0),
+        EndTime: new Date(2023, 5, 10, 11, 0),
         OwnerId: 1
       },
       // Add more schedules as needed
@@ -105,7 +111,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
   public group: GroupModel = {
     resources: ["Rooms", "Owners"]
   };
-  public roomDataSource: Object[] = [
+  public roomDataSource: Resource[] = [
     { RoomText: "Casual Labor", Id: 1, RoomColor: "#cb6bb2" },
     { RoomText: "Kitchen", Id: 2, RoomColor: "#56ca85" },
     { RoomText: "Manager", Id: 3, RoomColor: "#7499e1" },
@@ -146,20 +152,17 @@ export class AppComponent implements OnInit,AfterViewInit   {
   }
 
   openModal($event ? : any): void {
-    const selectedOption = $event.target.value;
-    if(selectedOption == 'new') {
-      const modal = document.getElementById('myModal');
-      
-      const openModalButton = document.getElementById('openModalButton');
-      if(modal) modal.style.display = 'block';
-      const closeButton = document.getElementsByClassName('close')[0];
-      closeButton.addEventListener('click', function() {
-        if(modal) {
-          modal.style.display = 'none';
-        }
-      });
-      this.onCloseInnerPopup();
-    }
+    const modal = document.getElementById('myModal');
+    
+    const openModalButton = document.getElementById('openModalButton');
+    if(modal) modal.style.display = 'block';
+    const closeButton = document.getElementsByClassName('close')[0];
+    closeButton.addEventListener('click', function() {
+      if(modal) {
+        modal.style.display = 'none';
+      }
+    });
+    this.onCloseInnerPopup();
   }
   addUser(): void {
     const modal = document.getElementById('exampleModal');
