@@ -83,7 +83,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
     { OwnerText: 'Steven', Id: 2, OwnerColor: '#f8a398' },
     { OwnerText: 'Michael', Id: 3, OwnerColor: '#7499e1' }
   ]; */
-  public viewShiftsBy: string = 'department';
+  public viewShiftsBy: string = 'user';
   public selectedOwner: any = 'all';
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
   public allowMultipleCategory: Boolean = true;
