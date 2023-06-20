@@ -42,10 +42,12 @@
               <div class="mt-3">
                 <div class="mb-4">
                   <label for="formGroupExampleInput" class="form-label text-uppercase">view shifts by</label>
-                  <select class="form-select" aria-label="Default select example">
-                    <option selected>Department</option>
-                    <option *ngFor="let room of roomDataSource" [value]="room.Id">{{ room.RoomText }}</option>
+                  <select class="form-select" aria-label="Default select example" name="viewShiftsBy"
+                    [(ngModel)]="viewShiftsBy">
+                    <option value="department">Department</option>
+                    <option value="user">Users</option>
                   </select>
+
                   <div class="m-2">
                     <button class="btn btn-success" type="button" (click)="openModal('departmentModal')">+ Add
                       Department</button>
@@ -81,9 +83,9 @@
         <ejs-schedule #scheduleObj width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
           [eventSettings]="eventSettings" [timeScale]="timeScale" [group]="group">
           <e-resources>
-            <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="ownerDataSource"
+            <e-resource field="OwnerId" title="Owner" name="Owners" [dataSource]="getFilteredDataSource()"
               [allowMultiple]="allowMultipleCategory" textField="OwnerText" idField="Id" groupIDField="OwnerGroupId"
-              colorField="OwnerColor">
+              [colorField]="viewShiftsBy == 'department' ? 'RoomColor': 'OwnerColor'">
             </e-resource>
           </e-resources>
 
@@ -92,7 +94,7 @@
               <ng-template #resourceHeaderTemplate let-data>
                 <div class="owner-container">
                   <img src="assets/user.png" alt="Owner Image" class="owner-image" />
-                  <div class="owner-name">{{ data.resourceData.OwnerText}}</div>
+                  <div class="owner-name">{{ data.resourceData.OwnerText || data.resourceData.RoomText}}</div>
                 </div>
               </ng-template>
             </e-view>
@@ -100,7 +102,7 @@
               <ng-template #resourceHeaderTemplate let-data>
                 <div class="owner-container">
                   <img src="assets/user.png" alt="Owner Image" class="owner-image" />
-                  <div class="owner-name">{{ data.resourceData.OwnerText }}</div>
+                  <div class="owner-name">{{ data.resourceData.OwnerText || data.resourceData.RoomText}}</div>
                 </div>
               </ng-template>
             </e-view>
@@ -108,7 +110,7 @@
               <ng-template #resourceHeaderTemplate let-data>
                 <div class="owner-container">
                   <img src="assets/user.png" alt="Owner Image" class="owner-image" />
-                  <div class="owner-name">{{ data.resourceData.OwnerText }}</div>
+                  <div class="owner-name">{{ data.resourceData.OwnerText || data.resourceData.RoomText}}</div>
                 </div>
               </ng-template>
             </e-view>
@@ -142,11 +144,11 @@
               <div class="col-sm-8">
                 <h2>User <b>Details</b></h2>
               </div>
-              <div class="col-sm-4" style="
-              text-align: right;
-          ">
+              <div class="col-sm-4" style="text-align: right;">
                 <button type="button" class="btn btn-info add-new" data-toggle="modal" data-target="#exampleModal"
-                  data-whatever="@mdo" (click)="addUser()"> Add </button>
+                  data-whatever="@mdo" (click)="addUser()" [disabled]="UserLimit"> Add User</button>
+                <br>
+                <span class="text-danger" *ngIf="UserLimit">Add user limited has exceeded</span>
               </div>
             </div>
           </div>

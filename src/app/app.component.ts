@@ -41,6 +41,11 @@ export class AppComponent implements OnInit,AfterViewInit   {
     // this.selectedDepart = this.roomDataSource[0].Id
     // this.selectedOwner = this.ownerDataSource[0]
   }
+
+  get UserLimit():boolean{
+    return this.ownerDataSource.length >= 5 //set a limit to allow add user
+  }
+
   /* public selectedDate: Date = new Date();
 
   // Different views of calendar
@@ -78,7 +83,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
     { OwnerText: 'Steven', Id: 2, OwnerColor: '#f8a398' },
     { OwnerText: 'Michael', Id: 3, OwnerColor: '#7499e1' }
   ]; */
-
+  public viewShiftsBy: string = 'department';
   public selectedOwner: any = 'all';
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
   public allowMultipleCategory: Boolean = true;
@@ -196,6 +201,11 @@ export class AppComponent implements OnInit,AfterViewInit   {
   
   onUserSave(type: string) {
     if (type === 'user') {
+      if(this.UserLimit){
+        alert("Add user limited has exceeded")
+        return;
+
+      }
       const newOwner = {
         Id: this.ownerDataSource.length + 1,
         OwnerText: this.user,
@@ -244,6 +254,17 @@ export class AppComponent implements OnInit,AfterViewInit   {
       return this.generateRandomColor();
     }
     return color;
+  }
+  
+  public getFilteredDataSource(): any {
+    if (this.viewShiftsBy === 'department') {
+      return this.roomDataSource;
+      // Filter owner data source based on department logic
+      // Return the filtered data source
+    } else if (this.viewShiftsBy === 'user') {
+      return this.ownerDataSource;
+    }
+    return this.ownerDataSource; // Return the original data source if no filter applied
   }
   
 }
