@@ -39,6 +39,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
       this.scheduleObj.refresh();
     }
     // this.selectedDepart = this.roomDataSource[0].Id
+    // this.selectedOwner = this.ownerDataSource[0]
   }
   /* public selectedDate: Date = new Date();
 
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
     { OwnerText: 'Michael', Id: 3, OwnerColor: '#7499e1' }
   ]; */
 
-  selectedOwner: Owner | undefined;
+  public selectedOwner: any = 'all';
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
   public allowMultipleCategory: Boolean = true;
   public selectedDate: Date = new Date();

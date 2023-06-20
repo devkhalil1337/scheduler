@@ -18,10 +18,10 @@
         </div>
         <div class="mb-4">
           <label for="formGroupExampleInput" class="form-label text-uppercase">User</label>
-          <select class="form-select" aria-label="Default select example" name="owner" [(ngModel)]="selectedOwner">
+          <select class="form-select" aria-label="Default select example" name="selectedOwner"
+            [(ngModel)]="selectedOwner">
             <option selected value="all">All</option>
             <option *ngFor="let owner of ownerDataSource" [value]="owner.Id">{{ owner.OwnerText }}</option>
-            <!-- <option value="new">+ Add Owner</option> -->
           </select>
         </div>
       </div>
@@ -251,7 +251,7 @@
               <tr *ngFor="let room of roomDataSource">
                 <td>{{room.Id}}</td>
                 <td>
-                  <div class="round-color" style="background-color: {{room.RoomColor}}"></div>
+                  <div class="round-color" [style]="{'background-color': room.RoomColor}"></div>
 
 
                 </td>
