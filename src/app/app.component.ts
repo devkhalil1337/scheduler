@@ -176,7 +176,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
     const newOwner = {
       Id: this.ownerDataSource.length+1,
       OwnerText: this.user,
-      OwnerColor: '',
+      OwnerColor: this.generateRandomColor(),
       OwnerGroupId: 4
     }
     this.ownerDataSource.push(newOwner)
@@ -192,6 +192,26 @@ export class AppComponent implements OnInit,AfterViewInit   {
     if(exampleModal) {
       exampleModal.style.display = 'none';
     }
+  }
+
+  generateRandomColor(): string {
+    const letters: string = "0123456789ABCDEF";
+    let color: string = "#";
+
+    // Generate a random 6-digit hex color
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+
+    // Check if the generated color already exists
+    const isUniqueColor: boolean = this.ownerDataSource.every((owner: Owner) => owner.OwnerColor !== color);
+
+    // If the generated color is not unique, generate a new one recursively
+    if (!isUniqueColor) {
+      return this.generateRandomColor();
+    }
+
+    return color;
   }
   
 }
