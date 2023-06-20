@@ -29,6 +29,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
   @ViewChild('scheduleObj', { static: false }) scheduleObj!: ScheduleComponent;
 
   user:string  = "";
+  selectedDepart:Number  = 0
   selectedUser: Owner | undefined
   ngOnInit(): void {
     $('div:not([class])').remove()
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
     if (this.scheduleObj) {
       this.scheduleObj.refresh();
     }
+    // this.selectedDepart = this.roomDataSource[0].Id
   }
   /* public selectedDate: Date = new Date();
 
@@ -151,66 +153,95 @@ export class AppComponent implements OnInit,AfterViewInit   {
     }
   }
 
-  openModal($event ? : any): void {
-    const modal = document.getElementById('myModal');
-    
-    const openModalButton = document.getElementById('openModalButton');
-    if(modal) modal.style.display = 'block';
+  openModal(modelName: string): void {
+    const modal = document.getElementById(modelName);
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  
     const closeButton = document.getElementsByClassName('close')[0];
-    closeButton.addEventListener('click', function() {
-      if(modal) {
+    closeButton.addEventListener('click', () => {
+      if (modal) {
         modal.style.display = 'none';
       }
     });
+  
+    const closeDept = document.getElementsByClassName('closeDept')[0];
+    closeDept.addEventListener('click', () => {
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    });
+  
     this.onCloseInnerPopup();
   }
+  
   addUser(): void {
     const modal = document.getElementById('exampleModal');
-    if(modal) {
+    const addDepartmentModal = document.getElementById('addDepartmentModal');
+  
+    if (modal) {
       modal.style.display = 'block';
-      modal.style.opacity = "1";
-      this.user = ""
+      modal.style.opacity = '1';
+      this.user = '';
+    }
+  
+    if (addDepartmentModal) {
+      addDepartmentModal.style.display = 'block';
+      addDepartmentModal.style.opacity = '1';
+      this.user = '';
     }
   }
-  onUserSave() {
-    const newOwner = {
-      Id: this.ownerDataSource.length+1,
-      OwnerText: this.user,
-      OwnerColor: this.generateRandomColor(),
-      OwnerGroupId: 4
+  
+  onUserSave(type: string) {
+    if (type === 'user') {
+      const newOwner = {
+        Id: this.ownerDataSource.length + 1,
+        OwnerText: this.user,
+        OwnerColor: this.generateRandomColor(),
+        OwnerGroupId: Number(this.selectedDepart)
+      };
+      this.ownerDataSource.push(newOwner);
+      this.selectedUser = newOwner;
+      this.scheduleObj.refresh();
+      this.onCloseInnerPopup();
+    } else if (type === 'dept') {
+      const newOwner = {
+        Id: this.roomDataSource.length + 1,
+        RoomText: this.user,
+        RoomColor: this.generateRandomColor()
+      };
+      this.roomDataSource.push(newOwner);
+      this.scheduleObj.refresh();
+      this.onCloseInnerPopup();
     }
-    this.ownerDataSource.push(newOwner)
-    this.selectedUser = newOwner
-    this.scheduleObj.refresh();
-    this.onCloseInnerPopup();
-
   }
-
-  onCloseInnerPopup(){
+  
+  onCloseInnerPopup() {
     const exampleModal = document.getElementById('exampleModal');
+    const addDepartmentModal = document.getElementById('addDepartmentModal');
     const innerCloseButton = document.getElementsByClassName('closeInner')[0];
-    if(exampleModal) {
+  
+    if (exampleModal) {
       exampleModal.style.display = 'none';
     }
+  
+    if (addDepartmentModal) {
+      addDepartmentModal.style.display = 'none';
+    }
   }
+  
 
   generateRandomColor(): string {
     const letters: string = "0123456789ABCDEF";
     let color: string = "#";
-
-    // Generate a random 6-digit hex color
     for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
-
-    // Check if the generated color already exists
     const isUniqueColor: boolean = this.ownerDataSource.every((owner: Owner) => owner.OwnerColor !== color);
-
-    // If the generated color is not unique, generate a new one recursively
     if (!isUniqueColor) {
       return this.generateRandomColor();
     }
-
     return color;
   }
   

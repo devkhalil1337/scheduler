@@ -75,3 +75,9 @@
 .modal-content{
   height: 100%!important;
 }
+
+.round-color {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
