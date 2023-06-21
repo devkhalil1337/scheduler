@@ -36,16 +36,12 @@ export class AppComponent implements OnInit,AfterViewInit   {
   }
   ngAfterViewInit() {
     if (this.scheduleObj) {
+      this.scheduleObj.changeView('TimelineWeek');
       this.scheduleObj.refresh();
     }
     // this.selectedDepart = this.roomDataSource[0].Id
     // this.selectedOwner = this.ownerDataSource[0]
   }
-
-  get UserLimit():boolean{
-    return this.ownerDataSource.length >= 5 //set a limit to allow add user
-  }
-
   /* public selectedDate: Date = new Date();
 
   // Different views of calendar
@@ -201,11 +197,6 @@ export class AppComponent implements OnInit,AfterViewInit   {
   
   onUserSave(type: string) {
     if (type === 'user') {
-      if(this.UserLimit){
-        alert("Add user limited has exceeded")
-        return;
-
-      }
       const newOwner = {
         Id: this.ownerDataSource.length + 1,
         OwnerText: this.user,
