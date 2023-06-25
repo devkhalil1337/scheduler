@@ -15,6 +15,7 @@ interface Resource {
   RoomText: string;
   Id: number;
   RoomColor: string;
+  roomId?:number;
 }
 
 @Component({
@@ -31,14 +32,19 @@ export class AppComponent implements OnInit,AfterViewInit   {
   user:string  = "";
   selectedDepart:Number  = 0
   selectedUser: Owner | undefined
+  
   ngOnInit(): void {
+    this.updateEventDataSource()
     $('div:not([class])').remove()
   }
   ngAfterViewInit() {
     if (this.scheduleObj) {
-      this.scheduleObj.refresh();
       setTimeout(() => {
+       
+
         this.scheduleObj.changeView('TimelineWeek');
+        this.scheduleObj.refresh();
+        
       },0)
     }
     // this.selectedDepart = this.roomDataSource[0].Id
@@ -81,6 +87,109 @@ export class AppComponent implements OnInit,AfterViewInit   {
     { OwnerText: 'Steven', Id: 2, OwnerColor: '#f8a398' },
     { OwnerText: 'Michael', Id: 3, OwnerColor: '#7499e1' }
   ]; */
+
+  public OwnerMockData = [
+    {
+      Id: 1,
+      Subject: 'Arpit',
+      StartTime: new Date(2023, 5, 2, 10, 0),
+      EndTime: new Date(2023, 5, 2, 12, 0),
+      roomId: 1
+    },
+    {
+      Id: 2,
+      Subject: 'Steven',
+      StartTime: new Date(2023, 5, 4, 14, 0),
+      EndTime: new Date(2023, 5, 5, 18, 0),
+      roomId: 2
+    },
+    {
+      Id: 3,
+      Subject: 'Michael',
+      StartTime: new Date(2023, 5, 8, 9, 0),
+      EndTime: new Date(2023, 5, 10, 11, 0),
+      roomId: 3
+    },
+    {
+      Id: 4,
+      Subject: 'John',
+      StartTime: new Date(2023, 5, 12, 13, 0),
+      EndTime: new Date(2023, 5, 12, 15, 0),
+      roomId: 1
+    },
+    {
+      Id: 5,
+      Subject: 'Sarah',
+      StartTime: new Date(2023, 5, 15, 11, 0),
+      EndTime: new Date(2023, 5, 15, 13, 0),
+      roomId: 2
+    },
+    {
+      Id: 6,
+      Subject: 'David',
+      StartTime: new Date(2023, 5, 18, 9, 0),
+      EndTime: new Date(2023, 5, 18, 11, 0),
+      roomId: 3
+    },
+    {
+      Id: 7,
+      Subject: 'Emily',
+      StartTime: new Date(2023, 5, 22, 14, 0),
+      EndTime: new Date(2023, 5, 22, 16, 0),
+      roomId: 1
+    },
+    {
+      Id: 8,
+      Subject: 'Daniel',
+      StartTime: new Date(2023, 5, 25, 12, 0),
+      EndTime: new Date(2023, 5, 25, 14, 0),
+      roomId: 2
+    },
+    {
+      Id: 9,
+      Subject: 'Olivia',
+      StartTime: new Date(2023, 5, 28, 10, 0),
+      EndTime: new Date(2023, 5, 28, 12, 0),
+      roomId: 3
+    },
+    {
+      Id: 10,
+      Subject: 'Matthew',
+      StartTime: new Date(2023, 5, 30, 16, 0),
+      EndTime: new Date(2023, 5, 30, 18, 0),
+      roomId: 1
+    }
+    // Add more entries as needed
+  ];
+  
+  public RoomMockData = [
+    {
+      Id: 1,
+      Subject: 'Meeting',
+      StartTime: new Date(2023, 5, 2, 10, 0),
+      EndTime: new Date(2023, 5, 2, 12, 0),
+      OwnerId: 1,
+      roomId:1
+    },
+    {
+      Id: 2,
+      Subject: 'Conference',
+      StartTime: new Date(2023, 5, 4, 14,0),
+      EndTime: new Date(2023, 5, 5, 18, 0),
+      OwnerId: 2,
+      roomId:2
+    },
+    {
+      Id: 3,
+      Subject: 'Training',
+      StartTime: new Date(2023, 5, 8, 9, 0),
+      EndTime: new Date(2023, 5, 10, 11, 0),
+      OwnerId: 1,
+      roomId:1
+    },
+    // Add more schedules as needed
+  ]
+
   public viewShiftsBy: string = 'user';
   public selectedOwner: any = 'all';
   public timeScale: TimeScaleModel = { enable: true, interval: 60, slotCount: 1 };
@@ -88,30 +197,7 @@ export class AppComponent implements OnInit,AfterViewInit   {
   public selectedDate: Date = new Date();
   public views: Array<string> = ["Day", "Week", "Month","TimelineDay"];
   public eventSettings: EventSettingsModel = {
-    dataSource: [
-      {
-        Id: 1,
-        Subject: 'Meeting',
-        StartTime: new Date(2023, 5, 2, 10, 0),
-        EndTime: new Date(2023, 5, 2, 12, 0),
-        OwnerId: 1
-      },
-      {
-        Id: 2,
-        Subject: 'Conference',
-        StartTime: new Date(2023, 5, 4, 14,0),
-        EndTime: new Date(2023, 5, 5, 18, 0),
-        OwnerId: 2
-      },
-      {
-        Id: 3,
-        Subject: 'Training',
-        StartTime: new Date(2023, 5, 8, 9, 0),
-        EndTime: new Date(2023, 5, 10, 11, 0),
-        OwnerId: 1
-      },
-      // Add more schedules as needed
-    ],
+    dataSource: [],
     resourceColorField: 'Rooms'
   };
   public group: GroupModel = {
@@ -119,17 +205,26 @@ export class AppComponent implements OnInit,AfterViewInit   {
   };
   public roomDataSource: Resource[] = [
     { RoomText: "Casual Labor", Id: 1, RoomColor: "#cb6bb2" },
-    { RoomText: "Kitchen", Id: 2, RoomColor: "#56ca85" },
-    { RoomText: "Manager", Id: 3, RoomColor: "#7499e1" },
-    { RoomText: "Operations", Id: 4, RoomColor: "#f8a398" },
-    { RoomText: "Part time", Id: 5, RoomColor: "#ffaa00" }
+    { RoomText: "Kitchen", Id: 2, RoomColor: "#56ca85"},
+    { RoomText: "Manager", Id: 3, RoomColor: "#7499e1"},
+    { RoomText: "Operations", Id: 4, RoomColor: "#f8a398"},
+    { RoomText: "Part time", Id: 5, RoomColor: "#ffaa00"}
   ];
   public allowMultipleOwner: Boolean = true;
   public ownerDataSource: Owner[] = [
     { OwnerText: "Arpit", Id: 1, OwnerGroupId: 4, OwnerColor: "#ffaa00" },
     { OwnerText: "Steven", Id: 2, OwnerGroupId: 3, OwnerColor: "#f8a398" },
-    { OwnerText: "Michael", Id: 3, OwnerGroupId: 4, OwnerColor: "#7499e1" }
+    { OwnerText: "Michael", Id: 3, OwnerGroupId: 4, OwnerColor: "#7499e1" },
+    { OwnerText: "John", Id: 4, OwnerGroupId: 3, OwnerColor: "#56ca85" },
+    { OwnerText: "Sarah", Id: 5, OwnerGroupId: 4, OwnerColor: "#cb6bb2" },
+    { OwnerText: "David", Id: 6, OwnerGroupId: 3, OwnerColor: "#aabbcc" },
+    { OwnerText: "Emily", Id: 7, OwnerGroupId: 4, OwnerColor: "#ddccbb" },
+    { OwnerText: "Daniel", Id: 8, OwnerGroupId: 3, OwnerColor: "#8899aa" },
+    { OwnerText: "Olivia", Id: 9, OwnerGroupId: 4, OwnerColor: "#ccddff" },
+    { OwnerText: "Matthew", Id: 10, OwnerGroupId: 3, OwnerColor: "#99aabb" }
+    // Add more entries as needed
   ];
+  
 
   onScheduleCreated(args: { schedule: ScheduleComponent }): void {
     this.scheduleObj = args.schedule;
@@ -248,6 +343,17 @@ export class AppComponent implements OnInit,AfterViewInit   {
     }
     return color;
   }
+
+  updateEventDataSource(): void {
+    // Modify the event data based on your requirements
+   
+    if (this.viewShiftsBy === 'department') {
+      this.eventSettings.dataSource = this.OwnerMockData
+    }else{
+      this.eventSettings.dataSource = this.RoomMockData;
+    }
+    // Assign the updated data to eventSettings.dataSource
+  }
   
   public getFilteredDataSource(): any {
     if (this.viewShiftsBy === 'department') {
@@ -259,6 +365,19 @@ export class AppComponent implements OnInit,AfterViewInit   {
     }
     return this.ownerDataSource; // Return the original data source if no filter applied
   }
+
+  get isUserView():boolean  {
+    return this.viewShiftsBy == 'user'
+  }
+
+  onChange(newValue:any) {
+    console.log(newValue);
+    if (newValue === 'department') {
+      this.scheduleObj.eventSettings.dataSource = this.OwnerMockData
+    } else if (newValue === 'user') {
+      this.scheduleObj.eventSettings.dataSource = this.RoomMockData
+    }
+}
   
 }
 
