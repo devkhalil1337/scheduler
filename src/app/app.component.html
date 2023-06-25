@@ -11,9 +11,6 @@
           <label for="formGroupExampleInput" class="form-label text-uppercase">Schedule</label>
           <select class="form-select" aria-label="Default select example">
             <option selected>Default</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
           </select>
         </div>
         <div class="mb-4">
@@ -21,7 +18,7 @@
           <select class="form-select" aria-label="Default select example" name="selectedOwner"
             [(ngModel)]="selectedOwner">
             <option selected value="all">All</option>
-            <option *ngFor="let owner of ownerDataSource" [value]="owner.Id">{{ owner.OwnerText }}</option>
+            <!-- <option *ngFor="let owner of ownerDataSource" [value]="owner.Id">{{ owner.OwnerText }}</option> -->
           </select>
         </div>
       </div>
@@ -52,15 +49,6 @@
                     <button class="btn btn-success" type="button" (click)="openModal('departmentModal')">+ Add
                       Department</button>
                   </div>
-                </div>
-                <div class="mb-4">
-                  <label for="formGroupExampleInput" class="form-label text-uppercase">view shift colors by</label>
-                  <select class="form-select" aria-label="Default select example">
-                    <option selected>Shift</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
                 </div>
               </div>
             </div>
