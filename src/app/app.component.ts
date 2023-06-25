@@ -35,12 +35,13 @@ export class AppComponent implements OnInit,AfterViewInit   {
   selectedUser: Owner | undefined
   
   ngOnInit(): void {
-    this.updateEventDataSource()
+    // this.updateEventDataSource()
     $('div:not([class])').remove()
     L10n.load({
       'en-US': {
         'schedule': {
-          'newEvent': 'New Shift'
+          'newEvent': 'New Shift',
+          'title':'Department Name'
         }
       }
     });
@@ -220,12 +221,12 @@ export class AppComponent implements OnInit,AfterViewInit   {
   ];
   public allowMultipleOwner: Boolean = true;
   public ownerDataSource: Owner[] = [
-    { OwnerText: "Arpit", Id: 1, OwnerGroupId: 4, OwnerColor: "#ffaa00" },
-    { OwnerText: "Steven", Id: 2, OwnerGroupId: 3, OwnerColor: "#f8a398" },
-    { OwnerText: "Michael", Id: 3, OwnerGroupId: 4, OwnerColor: "#7499e1" },
+    { OwnerText: "Arpit", Id: 1, OwnerGroupId: 1, OwnerColor: "#ffaa00" },
+    { OwnerText: "Steven", Id: 2, OwnerGroupId: 1, OwnerColor: "#f8a398" },
+    { OwnerText: "Michael", Id: 3, OwnerGroupId: 2, OwnerColor: "#7499e1" },
     { OwnerText: "John", Id: 4, OwnerGroupId: 3, OwnerColor: "#56ca85" },
     { OwnerText: "Sarah", Id: 5, OwnerGroupId: 4, OwnerColor: "#cb6bb2" },
-    { OwnerText: "David", Id: 6, OwnerGroupId: 3, OwnerColor: "#aabbcc" },
+    { OwnerText: "David", Id: 6, OwnerGroupId: 2, OwnerColor: "#aabbcc" },
     { OwnerText: "Emily", Id: 7, OwnerGroupId: 4, OwnerColor: "#ddccbb" },
     { OwnerText: "Daniel", Id: 8, OwnerGroupId: 3, OwnerColor: "#8899aa" },
     { OwnerText: "Olivia", Id: 9, OwnerGroupId: 4, OwnerColor: "#ccddff" },
@@ -381,10 +382,27 @@ export class AppComponent implements OnInit,AfterViewInit   {
   onChange(newValue:any) {
     console.log(newValue);
     if (newValue === 'department') {
-      this.scheduleObj.eventSettings.dataSource = this.OwnerMockData
+      L10n.load({
+        'en-US': {
+          'schedule': {
+            'newEvent': 'New Shift',
+            'title':'Name',
+          },
+        }
+      });
+      // this.scheduleObj.eventSettings.dataSource = this.OwnerMockData
     } else if (newValue === 'user') {
-      this.scheduleObj.eventSettings.dataSource = this.RoomMockData
+      L10n.load({
+        'en-US': {
+          'schedule': {
+            'newEvent': 'New Shift',
+            'title':'Name',
+          },
+        }
+      });
+      // this.scheduleObj.eventSettings.dataSource = this.RoomMockData
     }
+    this.scheduleObj.refresh();
 }
   
 }

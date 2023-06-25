@@ -71,9 +71,9 @@
         <ejs-schedule #scheduleObj width="100%" height="550px" [selectedDate]="selectedDate" [views]="views"
           [eventSettings]="eventSettings" [timeScale]="timeScale" [group]="group">
           <e-resources>
-            <e-resource [field]="isUserView ? 'OwnerId':'roomId'" title="Owner" name="Owners"
-              [dataSource]="getFilteredDataSource()" [allowMultiple]="allowMultipleCategory" textField="OwnerText"
-              idField="Id" groupIDField="roomId"
+            <e-resource [field]="isUserView ? 'OwnerId':'roomId'" [title]="isUserView ? 'Users':'Department Names'"
+              name="Owners" [dataSource]="getFilteredDataSource()" [allowMultiple]="allowMultipleCategory"
+              [textField]="isUserView ? 'OwnerText':'RoomText'" idField="Id" groupIDField="roomId"
               [colorField]="viewShiftsBy == 'department' ? 'RoomColor': 'OwnerColor'">
             </e-resource>
           </e-resources>
