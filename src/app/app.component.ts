@@ -36,8 +36,10 @@ export class AppComponent implements OnInit,AfterViewInit   {
   }
   ngAfterViewInit() {
     if (this.scheduleObj) {
-      this.scheduleObj.changeView('TimelineWeek');
       this.scheduleObj.refresh();
+      setTimeout(() => {
+        this.scheduleObj.changeView('TimelineWeek');
+      },0)
     }
     // this.selectedDepart = this.roomDataSource[0].Id
     // this.selectedOwner = this.ownerDataSource[0]
