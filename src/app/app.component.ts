@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '
 import { extend } from '@syncfusion/ej2-base';
 import { DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService, EventSettingsModel, View, GroupModel, TimeScaleModel, ScheduleComponent } from '@syncfusion/ej2-angular-schedule';
 import { roomData } from '../data';
+import { L10n } from '@syncfusion/ej2-base';
 declare var $: any;
 
 interface Owner {
@@ -36,6 +37,13 @@ export class AppComponent implements OnInit,AfterViewInit   {
   ngOnInit(): void {
     this.updateEventDataSource()
     $('div:not([class])').remove()
+    L10n.load({
+      'en-US': {
+        'schedule': {
+          'newEvent': 'New Shift'
+        }
+      }
+    });
   }
   ngAfterViewInit() {
     if (this.scheduleObj) {
